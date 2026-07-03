@@ -1,0 +1,11 @@
+langchain
+langchain-core
+langchain-openai
+pydantic
+fastapi
+uvicorn
+chromedb
+dotenv
+streamlit
+langsmith
+langchain-community
