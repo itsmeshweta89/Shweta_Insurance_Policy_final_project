@@ -1,0 +1,74 @@
+version: "1.0"
+name: insurance_classification_prompt
+description: "Insurance intent classification prompt"
+author: "insurance-team"
+updated: "2026-07-19"
+
+tags:
+  - classification
+  - intent
+
+
+template: |
+
+  Classify the customer message into one of these insurance intents:
+
+  - claim_intent_or_status:
+      claim filing, claim status, rejected claim,
+      claim documents, settlement
+
+  - policy_information_query:
+      coverage, benefits, exclusions,
+      waiting period, policy details
+
+  - renewal_or_lapse:
+      renewal, expiry, grace period,
+      policy inactive
+
+  - premium_payment_issue:
+      premium payment, failed payment,
+      due amount
+
+  - complaint_or_escalation:
+      angry customer, dissatisfaction,
+      unresolved issue
+
+  - fraud_or_scam:
+      fake policy, fraud, unauthorized activity
+
+  - general_faq:
+      general insurance questions
+
+
+  Respond with JSON:
+
+  {
+    "intent": "<category>",
+    "confidence": <0-1>,
+    "routing": "<team>"
+  }
+
+
+  Customer message:
+  {message}
+
+
+variables:
+  - message
+
+
+routing_map:
+
+  claim_intent_or_status: claims_team
+
+  policy_information_query: policy_support
+
+  renewal_or_lapse: renewal_team
+
+  premium_payment_issue: billing_team
+
+  complaint_or_escalation: grievance_team
+
+  fraud_or_scam: fraud_team
+
+  general_faq: customer_support

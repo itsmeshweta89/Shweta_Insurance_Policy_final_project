@@ -1,13 +1,34 @@
-from typing import Dict
-from langchain_community.chat_message_histories import ChatMessageHistory
+import json
+import os
+from functools import lru_cache
 
-_session_registry: Dict[str, ChatMessageHistory] = {}
+from upstash_redis import Redis
 
-def get_session_history(session_id: str) -> ChatMessageHistory:
-    if session_id not in _session_registry:
-        _session_registry[session_id] = ChatMessageHistory()
-    return _session_registry[session_id]
+MAX_HISTORY_TURNS = int(os.getenv("MEMORY_MAX_TURNS", "20"))
+SESSION_TTL_SECONDS = int(os.getenv("MEMORY_TTL_SECONDS", "86400"))
 
-def clear_session_history(session_id: str) -> None:
-    if session_id in _session_registry:
-        _session_registry[session_id].clear()
+
+@lru_cache(maxsize=1)
+def _get_client() -> Redis:
+    return Redis.from_env()
+
+
+def _session_key(session_id: str) -> str:
+    return f"session:{session_id}:history"
+
+
+def get_history(session_id: str) -> list[dict]:
+    raw_items = _get_client().lrange(_session_key(session_id), 0, -1)
+    return [json.loads(item) for item in raw_items]
+
+
+def append_turn(session_id: str, role: str, content: str) -> None:
+    key = _session_key(session_id)
+    client = _get_client()
+    client.rpush(key, json.dumps({"role": role, "content": content}))
+    client.ltrim(key, -MAX_HISTORY_TURNS, -1)
+    client.expire(key, SESSION_TTL_SECONDS)
+
+
+def clear_session(session_id: str) -> None:
+    _get_client().delete(_session_key(session_id))

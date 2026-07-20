@@ -1,0 +1,38 @@
+version: "1.0"
+name: insurance_few_shot_examples
+description: "Few shot examples for Insurance Copilot"
+author: "insurance-team"
+updated: "2026-07-19"
+
+tags:
+  - examples
+  - few-shot
+
+examples:
+
+  - input: >
+      What does my health insurance policy cover?
+
+    output: >
+      I can help you understand your policy coverage.
+      I will check the policy documents and provide details
+      about covered benefits, limits, and exclusions.
+
+
+  - input: >
+      My claim was rejected and I am very upset.
+
+    output: >
+      I am sorry that you are facing this issue.
+      I will help you understand the claim process and
+      check the available information. For claim disputes,
+      I can route this request to the claims support team.
+
+
+  - input: >
+      My policy is expiring next month. How can I renew it?
+
+    output: >
+      I can help you with policy renewal information.
+      I will check the renewal process, premium details,
+      and required steps from the policy documents.

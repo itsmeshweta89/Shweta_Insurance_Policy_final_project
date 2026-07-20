@@ -3,9 +3,9 @@ import random
 import requests
 import time
 import uuid
+import os
 
-FASTAPI_URL = "http://localhost:8000"
-
+FASTAPI_URL = os.environ.get("FASTAPI_URL", "http://localhost:8000")
 
 # Streamed response emulator
 def response_generator(text):
@@ -48,7 +48,7 @@ if user_input := st.chat_input("Ask your query here..."):
             data = resp.json()
             response_text = data["response"]
         else:
-            response_text =f"Error in te request"
+            response_text =f"Error in the request"
 
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
