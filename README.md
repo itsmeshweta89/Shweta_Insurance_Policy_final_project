@@ -147,8 +147,11 @@ Build vector database:
 python -m app.rag.ingest
 ```
 
-Process: - Load documents - Split documents into chunks - Create
-embeddings - Store vectors in ChromaDB
+Process: 
+- Load documents 
+- Split documents into chunks 
+- Create embeddings 
+- Store vectors in ChromaDB
 
 ------------------------------------------------------------------------
 

@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from mcp.server import Server
-from mcp.server.stdio import run_server
+from mcp.server.stdio import stdio_server
 from mcp.types import (
     Tool,
     TextContent,
@@ -228,7 +228,12 @@ async def call_tool(name, arguments):
     )
 
 async def main():
-    await run_server(server)
+    async with stdio_server() as (read, write):
+        await server.run(
+            read,
+            write,
+            initialization_options={}
+        )
 
 if __name__ == "__main__":
     import asyncio
